@@ -1,12 +1,12 @@
-#include <stdio.h>
+include <stdio.h>
 #define MAX 50
 
 void main()
 {
-	void push(char stack[], char item, int *top);
-	char pop(char stack[], int *top);
-	int priority(char op);
-	void infixtoprefix(char s[], int *top);
+    void push(char st[], char item, int *top);
+    char pop(char st[], int *top);
+    int priority(char op);
+    void infixtoprefix(char s[], int *top);
 
     char s[MAX];
     int top = -1;
@@ -17,10 +17,10 @@ void main()
     printf("Prefix Expression: ");
     infixtoprefix(s, &top);
 
-    return ;
+    return;
 }
 
-void push(char stack[], char item, int *top)
+void push(char st[], char item, int *top)
 {
     if (*top == MAX - 1)
     {
@@ -28,12 +28,12 @@ void push(char stack[], char item, int *top)
     }
     else
     {
-        *top=*top+1;
-        stack[*top] = item;
+        *top = *top + 1;
+        st[*top] = item;
     }
 }
 
-char pop(char stack[], int *top)
+char pop(char st[], int *top)
 {
     char item;
 
@@ -43,8 +43,8 @@ char pop(char stack[], int *top)
         return '\0';
     }
 
-    item = stack[*top];
-    *top=*top-1;
+    item = st[*top];
+    *top = *top - 1;
 
     return item;
 }
@@ -65,7 +65,7 @@ void infixtoprefix(char s[], int *top)
     int i;
     int k;
     char ch;
-    char stack[MAX];
+    char st[MAX];
     char result[MAX];
 
     len = 0;
@@ -82,28 +82,28 @@ void infixtoprefix(char s[], int *top)
 
         if (ch == ')')
         {
-            push(stack, ch, top);
+            push(st, ch, top);
         }
         else if (ch == '(')
         {
-            while (*top != -1 && stack[*top] != ')')
+            while (*top != -1 && st[*top] != ')')
             {
-                result[k++] = pop(stack, top);
+                result[k++] = pop(st, top);
             }
 
             if (*top != -1)
             {
-                pop(stack, top);
+                pop(st, top);
             }
         }
         else if (ch == '+' || ch == '-' || ch == '*' || ch == '/')
         {
-            while (*top != -1 && priority(stack[*top]) > priority(ch))
+            while (*top != -1 && priority(st[*top]) > priority(ch))
             {
-                result[k++] = pop(stack, top);
+                result[k++] = pop(st, top);
             }
 
-            push(stack, ch, top);
+            push(st, ch, top);
         }
         else
         {
@@ -113,7 +113,7 @@ void infixtoprefix(char s[], int *top)
 
     while (*top != -1)
     {
-        result[k++] = pop(stack, top);
+        result[k++] = pop(st, top);
     }
 
     result[k] = '\0';
