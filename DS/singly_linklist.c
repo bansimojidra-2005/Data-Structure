@@ -16,16 +16,19 @@ void insert(struct Node **head, int value)
     newNode->data = value;
     newNode->next = NULL;
 
-    if (*head == NULL) {
+    if (*head == NULL || value <(*head)->data)
+	{
+		newNode->next = *head;
         *head = newNode;
     }
     else {
         temp = *head;
 
-        while (temp->next != NULL) {
+        while (temp->next != NULL  && temp->next->data < value)
+		{
             temp = temp->next;
         }
-
+		newNode->next = temp->next;
         temp->next = newNode;
     }
 
