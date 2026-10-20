@@ -1,0 +1,206 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Structure for Matrix Node
+struct Node {
+    int data;
+    struct Node *right;
+    struct Node *down;
+};
+
+// Function to Create a Multi-Linked Matrix
+struct Node* createMatrix(int rows, int cols) {
+    int i, j, value;
+    struct Node *head = NULL;
+    struct Node *rowHead[100];
+    struct Node *prevCol;
+    struct Node *newNode;
+
+    for (i = 0; i < rows; i++) {
+        prevCol = NULL;
+
+        for (j = 0; j < cols; j++) {
+            printf("Enter element [%d][%d]: ", i, j);
+            scanf("%d", &value);
+
+            // Create new node
+            newNode = (struct Node *)malloc(sizeof(struct Node));
+            newNode->data = value;
+            newNode->right = NULL;
+            newNode->down = NULL;
+
+            if (i == 0 && j == 0) {
+                head = newNode; // Set head for the matrix
+            }
+
+            // Connect horizontally
+            if (prevCol != NULL) {
+                prevCol->right = newNode;
+            }
+            prevCol = newNode;
+
+            // Connect vertically
+            if (i > 0) {
+                rowHead[j]->down = newNode;
+            }
+            rowHead[j] = newNode;
+        }
+    }
+    return head;
+}
+
+// Function to Display Matrix
+void displayMatrix(struct Node *head) {
+    struct Node *rowPtr;
+    struct Node *colPtr;
+
+    if (head == NULL) {
+        printf("\nMatrix is empty!\n");
+        return;
+    }
+
+    rowPtr = head;
+    while (rowPtr != NULL) {
+        colPtr = rowPtr;
+        while (colPtr != NULL) {
+            printf("%d\t", colPtr->data);
+            colPtr = colPtr->right;
+        }
+        printf("\n");
+        rowPtr = rowPtr->down;
+    }
+}
+
+// 1. Function for Matrix Addition
+void addMatrices(struct Node *head1, struct Node *head2) {
+    struct Node *r1, *r2, *c1, *c2;
+
+    if (head1 == NULL || head2 == NULL) {
+        printf("\nPlease create both matrices first!\n");
+        return;
+    }
+
+    r1 = head1;
+    r2 = head2;
+
+    printf("\n--- Result of Addition (A + B) ---\n");
+    while (r1 != NULL && r2 != NULL) {
+        c1 = r1;
+        c2 = r2;
+        while (c1 != NULL && c2 != NULL) {
+            printf("%d\t", c1->data + c2->data); // Add corresponding elements
+            c1 = c1->right;
+            c2 = c2->right;
+        }
+        printf("\n");
+        r1 = r1->down;
+        r2 = r2->down;
+    }
+}
+
+// 2. Function for Matrix Multiplication
+void multiplyMatrices(struct Node *head1, struct Node *head2, int r1_count, int c1_count, int c2_count) {
+    int i, j, k, sum;
+    struct Node *rowA, *colA, *rowB, *colB;
+
+    if (head1 == NULL || head2 == NULL) {
+        printf("\nPlease create both matrices first!\n");
+        return;
+    }
+
+    printf("\n--- Result of Multiplication (A * B) ---\n");
+
+    rowA = head1;
+    for (i = 0; i < r1_count; i++) {
+        for (j = 0; j < c2_count; j++) {
+            sum = 0;
+            colA = rowA;
+
+            // Traverse to column 'j' of Matrix B
+            colB = head2;
+            for (k = 0; k < j; k++) {
+                colB = colB->right;
+            }
+
+            // Perform Dot Product (Row A * Column B)
+            for (k = 0; k < c1_count; k++) {
+                sum += (colA->data) * (colB->data);
+                colA = colA->right;
+                colB = colB->down;
+            }
+
+            printf("%d\t", sum);
+        }
+        printf("\n");
+        rowA = rowA->down;
+    }
+}
+
+// Main Menu Function
+int main() {
+    int choice;
+    int r1 = 0, c1 = 0, r2 = 0, c2 = 0;
+    struct Node *matA = NULL;
+    struct Node *matB = NULL;
+
+    while (1) {
+        printf("\n==========================================");
+        printf("\n*** MULTILINKED MATRIX OPERATIONS ***");
+        printf("\n1. Create Matrices (A & B)");
+        printf("\n2. Display Matrices (A & B)");
+        printf("\n3. Matrix Addition (A + B)");
+        printf("\n4. Matrix Multiplication (A * B)");
+        printf("\n5. Exit");
+        printf("\n==========================================");
+        printf("\nEnter choice (1-5): ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("\n--- Matrix A ---");
+                printf("\nEnter Rows and Cols for Matrix A: ");
+                scanf("%d %d", &r1, &c1);
+                matA = createMatrix(r1, c1);
+
+                printf("\n--- Matrix B ---");
+                printf("\nEnter Rows and Cols for Matrix B: ");
+                scanf("%d %d", &r2, &c2);
+                matB = createMatrix(r2, c2);
+                break;
+
+            case 2:
+                printf("\n--- Matrix A ---\n");
+                displayMatrix(matA);
+                printf("\n--- Matrix B ---\n");
+                displayMatrix(matB);
+                break;
+
+            case 3:
+                // Check if dimensions match for Addition
+                if (r1 != r2 || c1 != c2) {
+                    printf("\nError: Addition requires identical dimensions (Row1==Row2 and Col1==Col2)!\n");
+                } else {
+                    addMatrices(matA, matB);
+                }
+                break;
+
+            case 4:
+                // Check if columns of A match rows of B for Multiplication
+                if (c1 != r2) {
+                    printf("\nError: Multiplication requires Matrix A Columns == Matrix B Rows!\n");
+                } else {
+                    multiplyMatrices(matA, matB, r1, c1, c2);
+                }
+                break;
+
+            case 5:
+                printf("\nExiting program...\n");
+                exit(0);
+
+            default:
+                printf("\nInvalid Choice! Try again.\n");
+        }
+    }
+
+    return 0;
+}
