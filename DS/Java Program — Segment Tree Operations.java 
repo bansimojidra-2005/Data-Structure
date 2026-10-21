@@ -1,0 +1,99 @@
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Integer> a = new ArrayList<>();
+        int choice, value, pos, l, r, sum;
+
+        do {
+            System.out.println("\n--- SEGMENT TREE MENU ---");
+            System.out.println("1. Insert");
+            System.out.println("2. Delete");
+            System.out.println("3. Display");
+            System.out.println("4. Range Sum");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter value: ");
+                    value = sc.nextInt();
+                    a.add(value);
+                    System.out.println("Value inserted successfully");
+                    break;
+
+                case 2:
+                    if (a.isEmpty()) {
+                        System.out.println("Tree is empty");
+                        break;
+                    }
+
+                    System.out.print("Enter index to delete (0 to "
+                            + (a.size() - 1) + "): ");
+                    pos = sc.nextInt();
+
+                    if (pos < 0 || pos >= a.size()) {
+                        System.out.println("Invalid index");
+                    } else {
+                        a.remove(pos);
+                        System.out.println("Value deleted successfully");
+                    }
+                    break;
+
+                case 3:
+                    if (a.isEmpty()) {
+                        System.out.println("Tree is empty");
+                    } else {
+                        sum = 0;
+                        System.out.print("Array elements: ");
+
+                        for (int x : a) {
+                            System.out.print(x + " ");
+                            sum += x;
+                        }
+
+                        System.out.println("\nTotal Sum: " + sum);
+                    }
+                    break;
+
+                case 4:
+                    if (a.isEmpty()) {
+                        System.out.println("Tree is empty");
+                        break;
+                    }
+
+                    System.out.print("Enter left and right index: ");
+                    l = sc.nextInt();
+                    r = sc.nextInt();
+
+                    if (l < 0 || r >= a.size() || l > r) {
+                        System.out.println("Invalid range");
+                    } else {
+                        sum = 0;
+
+                        for (int i = l; i <= r; i++) {
+                            sum += a.get(i);
+                        }
+
+                        System.out.println("Range Sum = " + sum);
+                    }
+                    break;
+
+                case 5:
+                    System.out.println("Exiting program");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice");
+            }
+
+        } while (choice != 5);
+
+        sc.close();
+    }
+}
