@@ -1,0 +1,73 @@
+
+import java.util.Scanner;
+import java.util.TreeSet;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        TreeSet<Integer> tree = new TreeSet<>();
+
+        int ch, ele;
+
+        while (true) {
+            System.out.println("\n----- AVL TREE -----");
+            System.out.println("1. Insert");
+            System.out.println("2. Delete");
+            System.out.println("3. Search");
+            System.out.println("4. Inorder");
+            System.out.println("5. Preorder");
+            System.out.println("6. Exit");
+
+            System.out.print("Enter your choice: ");
+            ch = sc.nextInt();
+
+            switch (ch) {
+                case 1:
+                    System.out.print("Enter element: ");
+                    ele = sc.nextInt();
+
+                    if (tree.add(ele))
+                        System.out.println("Element inserted.");
+                    else
+                        System.out.println("Duplicate value not allowed.");
+                    break;
+
+                case 2:
+                    System.out.print("Enter element to delete: ");
+                    ele = sc.nextInt();
+
+                    if (tree.remove(ele))
+                        System.out.println("Element deleted.");
+                    else
+                        System.out.println("Element not found.");
+                    break;
+
+                case 3:
+                    System.out.print("Enter element to search: ");
+                    ele = sc.nextInt();
+
+                    if (tree.contains(ele))
+                        System.out.println("Element Found.");
+                    else
+                        System.out.println("Element Not Found.");
+                    break;
+
+                case 4:
+                    System.out.println("Inorder Traversal: " + tree);
+                    break;
+
+                case 5:
+                    System.out.println("Preorder Traversal: " + tree);
+                    break;
+
+                case 6:
+                    sc.close();
+                    return;
+
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        }
+    }
+}
